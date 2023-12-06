@@ -1,41 +1,5 @@
 import re
 
-List = [
-    "seeds: 79 14 55 13",
-    "",
-    "seed-to-soil map:",
-    "50 98 2",
-    "52 50 48",
-    "",
-    "soil-to-fertilizer map:",
-    "0 15 37",
-    "37 52 2",
-    "39 0 15",
-    "",
-    "fertilizer-to-water map:",
-    "49 53 8",
-    "0 11 42",
-    "42 0 7",
-    "57 7 4",
-    "",
-    "water-to-light map:",
-    "88 18 7",
-    "18 25 70",
-    "",
-    "light-to-temperature map:",
-    "45 77 23",
-    "81 45 19",
-    "68 64 13",
-    "",
-    "temperature-to-humidity map:",
-    "0 69 1",
-    "1 0 69",
-    "",
-    "humidity-to-location map:",
-    "60 56 37",
-    "56 93 4",
-]
-
 
 seeds = []
 seed_to_soil = {"start_ranges": [], "destination_ranges": []}
@@ -150,14 +114,11 @@ def main():
 
         min_location = None
         for seed_start_range, seed_range_length in zip(seeds[::2], seeds[1::2]):
-            # print([get_seed_location(int(seed)) for seed in range(int(seed_start_range), int(seed_range_length))])
             for seed in range(int(seed_start_range), int(seed_start_range) + int(seed_range_length)):
-                print(f"\r{(seed - int(seed_start_range)) / int(seed_range_length) * 100:.2f}", end="", flush=True)
                 location = get_seed_location(seed)
                 if min_location == None or location < min_location:
                     min_location = location
         
-        print()
         print(min_location)
         
 
