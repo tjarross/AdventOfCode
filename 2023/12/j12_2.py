@@ -6,7 +6,7 @@ List = [
     "????.######..#####. 1,6,5",
     "?###???????? 3,2,1",
     # "?#????#?..#. 1,2,1",
-    # "????#????.?????????? 1,4,2,1,7",
+    "????#????.???????????????#????.?????????? 1,4,2,1,7,1,4,2,1,7",
 ]
 
 
@@ -55,12 +55,22 @@ def try_pattern(pattern: str, springs: str):
     # print("OK")
     return True
 
+saved = {}
+
 def guess(springs: str, damaged_groups: list):
+    # print(saved)
+    if springs + repr(damaged_groups) in list(saved):
+        return saved[springs + repr(damaged_groups)]
     # print(springs, damaged_groups)
     if len(springs) == 0 and len(damaged_groups) != 0:
+        saved[springs + repr(damaged_groups)] = 0
         return 0
     if len(damaged_groups) == 0:
-        return 1 if '#' not in springs else 0
+        if '#' not in springs:
+            saved[springs + repr(damaged_groups)] = 1
+            return 1
+        saved[springs + repr(damaged_groups)] = 0
+        return 0
     t = 0
     if try_pattern(f"{'#' * damaged_groups[0]}", springs) == True:
         # print(springs, springs[damaged_groups[0] + 1:])
@@ -69,8 +79,11 @@ def guess(springs: str, damaged_groups: list):
         # return t + r
     # print("T", t)
     if springs[0] == '#':
+        saved[springs + repr(damaged_groups)] = t
         return t
-    return t + guess(springs[1:], damaged_groups)
+    r = t + guess(springs[1:], damaged_groups)
+    saved[springs + repr(damaged_groups)] = r
+    return r
 
 
 def guess2(springs, damaged_groups):
@@ -90,7 +103,7 @@ def get_new_springs5(springs: str, damaged_groups: str):
 
 def main():
     with open("input.txt") as file:
-        lines = sorted(file.read().split('\n')[:-1], key=lambda x: x.count("?"), reverse=False)
+        lines = file.read().split('\n')[:-1]
 
     sum = 0
     for i, line in enumerate(lines):
